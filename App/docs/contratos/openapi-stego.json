@@ -1,0 +1,602 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "STEGO Backend V1",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Operación"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/steganography/analyze": {
+      "post": {
+        "tags": [
+          "Esteganografía"
+        ],
+        "summary": "Upload",
+        "operationId": "upload_api_v1_steganography_analyze_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT o sesión inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "detail": "Se requiere un JWT Bearer"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No tiene permiso sobre la operación o el recurso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "detail": "No posee permiso para esta operación"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "AUTH devolvió una decisión no verificable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "detail": "Respuesta de autorización no verificable"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH, capacidad o procesamiento no disponibles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordedAnalysisError"
+                    }
+                  ],
+                  "title": "Response 503 Upload Api V1 Steganography Analyze Post"
+                },
+                "examples": {
+                  "rechazo_previo": {
+                    "value": {
+                      "detail": "No se pudo comprobar la autorización vigente"
+                    }
+                  },
+                  "error_registrado": {
+                    "value": {
+                      "analysis_id": "8dcfac51-4119-493a-843a-342b9d0c49b6",
+                      "user_id": "95fcc5ba-63c3-404d-b4de-0d7e8ec12aa0",
+                      "filename": "archivo.png",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "technique": "pov_pearson_lsb_png8_v1",
+                      "indicators": {},
+                      "created_at": "2026-11-04T22:56:51.298997+00:00",
+                      "status": "error",
+                      "action": "cuarentena",
+                      "limitations": "Indicio estadístico de equiprobabilidad LSB, no prueba de esteganografía. Puede fallar con ruido, baja carga, LSB matching y otras técnicas. No analiza JPEG, metadatos ni cargas cifradas como tales.",
+                      "detail": "Tiempo de procesamiento agotado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "example": {
+                  "detail": "Error interno"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Formulario inválido o PNG corrupto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordedAnalysisError"
+                    }
+                  ],
+                  "title": "Response 400 Upload Api V1 Steganography Analyze Post"
+                },
+                "examples": {
+                  "rechazo_previo": {
+                    "value": {
+                      "detail": "Formulario multipart inválido"
+                    }
+                  },
+                  "error_registrado": {
+                    "value": {
+                      "analysis_id": "8dcfac51-4119-493a-843a-342b9d0c49b6",
+                      "user_id": "95fcc5ba-63c3-404d-b4de-0d7e8ec12aa0",
+                      "filename": "archivo.png",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "technique": "pov_pearson_lsb_png8_v1",
+                      "indicators": {},
+                      "created_at": "2026-11-04T22:56:51.298997+00:00",
+                      "status": "error",
+                      "action": "cuarentena",
+                      "limitations": "Indicio estadístico de equiprobabilidad LSB, no prueba de esteganografía. Puede fallar con ruido, baja carga, LSB matching y otras técnicas. No analiza JPEG, metadatos ni cargas cifradas como tales.",
+                      "detail": "PNG corrupto o inseguro"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Carga o dimensiones excesivas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordedAnalysisError"
+                    }
+                  ],
+                  "title": "Response 413 Upload Api V1 Steganography Analyze Post"
+                },
+                "examples": {
+                  "rechazo_previo": {
+                    "value": {
+                      "detail": "Archivo excesivo"
+                    }
+                  },
+                  "error_registrado": {
+                    "value": {
+                      "analysis_id": "8dcfac51-4119-493a-843a-342b9d0c49b6",
+                      "user_id": "95fcc5ba-63c3-404d-b4de-0d7e8ec12aa0",
+                      "filename": "archivo.png",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "technique": "pov_pearson_lsb_png8_v1",
+                      "indicators": {},
+                      "created_at": "2026-11-04T22:56:51.298997+00:00",
+                      "status": "error",
+                      "action": "cuarentena",
+                      "limitations": "Indicio estadístico de equiprobabilidad LSB, no prueba de esteganografía. Puede fallar con ruido, baja carga, LSB matching y otras técnicas. No analiza JPEG, metadatos ni cargas cifradas como tales.",
+                      "detail": "Dimensiones excesivas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Formato no admitido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordedAnalysisError"
+                    }
+                  ],
+                  "title": "Response 415 Upload Api V1 Steganography Analyze Post"
+                },
+                "examples": {
+                  "rechazo_previo": {
+                    "value": {
+                      "detail": "Firma de archivo no PNG"
+                    }
+                  },
+                  "error_registrado": {
+                    "value": {
+                      "analysis_id": "8dcfac51-4119-493a-843a-342b9d0c49b6",
+                      "user_id": "95fcc5ba-63c3-404d-b4de-0d7e8ec12aa0",
+                      "filename": "archivo.png",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "technique": "pov_pearson_lsb_png8_v1",
+                      "indicators": {},
+                      "created_at": "2026-11-04T22:56:51.298997+00:00",
+                      "status": "error",
+                      "action": "cuarentena",
+                      "limitations": "Indicio estadístico de equiprobabilidad LSB, no prueba de esteganografía. Puede fallar con ruido, baja carga, LSB matching y otras técnicas. No analiza JPEG, metadatos ni cargas cifradas como tales.",
+                      "detail": "Solo PNG de 8 bits L/RGB/RGBA"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/steganography/results/{analysis_id}": {
+      "get": {
+        "tags": [
+          "Esteganografía"
+        ],
+        "summary": "Result",
+        "operationId": "result_api_v1_steganography_results__analysis_id__get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT o sesión inválidos",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Se requiere un JWT Bearer"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No tiene permiso sobre la operación o el recurso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "No posee permiso para esta operación"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "AUTH devolvió una decisión no verificable",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Respuesta de autorización no verificable"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH no pudo proporcionar una decisión",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "No se pudo comprobar la autorización vigente"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Error interno"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identificador de análisis inválido",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Identificador de análisis inválido"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Análisis no encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Análisis no encontrado"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisResult": {
+        "properties": {
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "technique": {
+            "type": "string",
+            "title": "Technique"
+          },
+          "indicators": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Indicators"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "limitations": {
+            "type": "string",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "user_id",
+          "filename",
+          "sha256",
+          "technique",
+          "indicators",
+          "created_at",
+          "status",
+          "action",
+          "limitations"
+        ],
+        "title": "AnalysisResult",
+        "example": {
+          "action": "cuarentena",
+          "analysis_id": "8dcfac51-4119-493a-843a-342b9d0c49b6",
+          "created_at": "2026-11-04T22:56:51.298997+00:00",
+          "filename": "oculta_lsb.png",
+          "indicators": {
+            "alpha": 0.05,
+            "chi_square": 125.296875,
+            "eligible_pairs": 128,
+            "equiprobability_p_value": 0.5510812305839959,
+            "sample_count": 196608
+          },
+          "limitations": "Indicio estadístico de equiprobabilidad LSB, no prueba de esteganografía. Puede fallar con ruido, baja carga, LSB matching y otras técnicas. No analiza JPEG, metadatos ni cargas cifradas como tales.",
+          "sha256": "212985d37f143c8bcdd2a4cb276062f53687de556ac5ad39fca0f0f2ffa4551d",
+          "status": "sospechoso",
+          "technique": "pov_pearson_lsb_png8_v1",
+          "user_id": "95fcc5ba-63c3-404d-b4de-0d7e8ec12aa0"
+        }
+      },
+      "ApiError": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ApiError"
+      },
+      "RecordedAnalysisError": {
+        "properties": {
+          "analysis_id": {
+            "type": "string",
+            "title": "Analysis Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "technique": {
+            "type": "string",
+            "title": "Technique"
+          },
+          "indicators": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Indicators"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "limitations": {
+            "type": "string",
+            "title": "Limitations"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysis_id",
+          "user_id",
+          "filename",
+          "sha256",
+          "technique",
+          "indicators",
+          "created_at",
+          "status",
+          "action",
+          "limitations",
+          "detail"
+        ],
+        "title": "RecordedAnalysisError"
+      },
+      "ServiceHealth": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "service": {
+            "type": "string",
+            "title": "Service"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "service"
+        ],
+        "title": "ServiceHealth",
+        "example": {
+          "service": "stego",
+          "status": "ok"
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

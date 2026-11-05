@@ -1,0 +1,78 @@
+{
+  "fecha_local": "2026-11-02",
+  "implementacion": "AUTH V2",
+  "casillas_completadas": [
+    "API01",
+    "API02",
+    "API03",
+    "API04",
+    "API05",
+    "API06",
+    "API07",
+    "API08",
+    "API09",
+    "API10",
+    "API11",
+    "API12",
+    "C04",
+    "C10",
+    "D06",
+    "D07",
+    "D08",
+    "I01",
+    "I02",
+    "I03",
+    "I04",
+    "I05",
+    "I06",
+    "I07",
+    "J01",
+    "J02",
+    "J03",
+    "J04",
+    "J05",
+    "J06",
+    "R01",
+    "R02",
+    "R05",
+    "R06",
+    "R07",
+    "T02",
+    "T05",
+    "T06"
+  ],
+  "cantidad": 38,
+  "sha256_original": "120c1418f186f837d05cbcf41e46536f1b2a625730c5d890a1bb27c4c4202f32",
+  "sha256_v2": "d636a58a9e8c27b5fb18c1bd22abd66c01be150562e52b6b0dd4b92b7069f57b",
+  "original_intacto": true,
+  "unicas_diferencias": "[ ] sustituido por [x] en las entradas verificadas",
+  "evidencias": [
+    "pruebas-auth-v2.txt",
+    "pruebas-unitarias-auth-v2.txt",
+    "verificacion-compose.json",
+    "openapi.json",
+    "AUTH_V2.md"
+  ],
+  "pendiente": "STEGO, integración con STEGO real y entregables/pruebas/sustentación conjuntos. C05 se mantiene pendiente hasta integrar el servicio real.",
+  "nota_reubicacion_2026_11_05": {
+    "change": "Se corrigió únicamente el enlace relativo a la consigna tras mover los archivos a App/docs/historico.",
+    "snapshots": [
+      {
+        "file": "01_Analisis_y_checklist_Primer_Parcial.md",
+        "before": "120c1418f186f837d05cbcf41e46536f1b2a625730c5d890a1bb27c4c4202f32",
+        "after": "8b993d163ce1bc1c1f106215cb009401ecbfe3dead5b049a280274c472a4d887"
+      },
+      {
+        "file": "02_Analisis_y_checklist_Primer_Parcial.md",
+        "before": "d636a58a9e8c27b5fb18c1bd22abd66c01be150562e52b6b0dd4b92b7069f57b",
+        "after": "caa8b9ae40909dbf79c3e61401615cef6dfc0e29dfc7defbc7611a7e91a4eb44"
+      },
+      {
+        "file": "03_Analisis_y_checklist_Primer_Parcial.md",
+        "before": "3d9ad792a464943c36c55fa44f7450676e379a57cd00f74d394809eec0149d76",
+        "after": "fe7f3c387a76bc277412a8c4dbe0ea5c49f2fdfd1f8d91ee3cd2b2a3cf5e0519"
+      }
+    ],
+    "historical_hashes": "Los hashes de la fase original se conservan como evidencia de aquella fecha."
+  }
+}
